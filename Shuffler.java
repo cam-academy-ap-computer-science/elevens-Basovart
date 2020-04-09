@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This class provides a convenient way to test shuffling methods.
  */
@@ -16,7 +20,7 @@ public class Shuffler {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Results of " + SHUFFLE_COUNT +
-								 " consecutive perfect shuffles:");
+				" consecutive perfect shuffles:");
 		int[] values1 = {0, 1, 2, 3};
 		for (int j = 1; j <= SHUFFLE_COUNT; j++) {
 			perfectShuffle(values1);
@@ -29,7 +33,7 @@ public class Shuffler {
 		System.out.println();
 
 		System.out.println("Results of " + SHUFFLE_COUNT +
-								 " consecutive efficient selection shuffles:");
+				" consecutive efficient selection shuffles:");
 		int[] values2 = {0, 1, 2, 3};
 		for (int j = 1; j <= SHUFFLE_COUNT; j++) {
 			selectionShuffle(values2);
@@ -40,6 +44,9 @@ public class Shuffler {
 			System.out.println();
 		}
 		System.out.println();
+		System.out.println(flip());
+		System.out.println(arePermutations(values1, values2));
+
 	}
 
 
@@ -50,7 +57,23 @@ public class Shuffler {
 	 * @param values is an array of integers simulating cards to be shuffled.
 	 */
 	public static void perfectShuffle(int[] values) {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 3 *** */
+		int[] temp = new int[values.length];
+		int mid = (values.length + 1) / 2;
+
+		int unshuffledPos = 0;
+		int k = 0;
+		for ( ; k < mid; k++) {
+			temp[unshuffledPos] = values[k];
+			unshuffledPos += 2;
+		}
+		unshuffledPos = 1;
+		for ( ; k < values.length; k++) {
+			temp[unshuffledPos] = values[k];
+			unshuffledPos += 2;
+		}
+		for (k = 0; k < values.length; k++) {
+			values[k] = temp[k];
+		}
 	}
 
 	/**
@@ -65,6 +88,37 @@ public class Shuffler {
 	 * @param values is an array of integers simulating cards to be shuffled.
 	 */
 	public static void selectionShuffle(int[] values) {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 3 *** */
+		for (int k = values.length - 1; k > 0; k--) {
+			int pos = (int) (Math.random() * (k + 1));
+			int temp = values[pos];
+			values[pos] = values[k];
+			values[k] = temp;
+		}
+
+	}
+
+	public static String flip() {
+		if (Math.random() > 0.33) {
+			return "heads";
+		} else {
+			return "tails";
+		}
+
+}
+
+
+	public static boolean arePermutations(int[] arr1, int[] arr2) {
+		boolean outcome = true;
+		Arrays.parallelSort(arr1);
+		Arrays.parallelSort(arr2);
+		for(int i = 0; i < arr1.length; i++) {
+			if (arr1[i] == arr2[i]) {
+				outcome = true;
+			} else {
+				outcome = false;
+			}
+		}
+		return outcome;
 	}
 }
+
